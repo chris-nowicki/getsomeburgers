@@ -11,26 +11,31 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   first_name String
   last_name  String
-  birthday   DateTime @db.Date
   location   String
-  email      String   @unique
-  password   String
+  email      String    @unique
+  password   Password?
   profilePic String?
   posts      Post[]
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+}
+
+model Password {
+  hash   String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId Int    @unique
 }
 
 model Post {
   id           Int         @id @default(autoincrement())
-  author       User?       @relation(fields: [authorId], references: [id])
+  author       User?       @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   authorId     Int?
-  burger       Burger?     @relation(fields: [burgerId], references: [id])
+  burger       Burger?     @relation(fields: [burgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   burgerId     Int?
-  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   restaurantId Int?
   content      String?
   burgerRating Int
@@ -43,20 +48,8 @@ model Restaurant {
   name      String
   burgers   Burger[]
   posts     Post[]
-  address   RestaurantAddress?
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
-}
-
-model RestaurantAddress {
-  id           Int         @id @default(autoincrement())
-  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
-  restaurantId Int?        @unique
-  address1     String
-  address2     String
-  city         String
-  STATE        String
-  zip          Int
 }
 
 model Burger {

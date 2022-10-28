@@ -21,7 +21,6 @@ const userSchema = yup.object({
 			message: { email: "Invalid email address" },
 			excludeEmptyString: true,
 		}),
-    birthday: yup.date().optional(),
 	password: yup.string().trim().required({ password: "password required" }),
 	confirm_password: yup
 		.string()
