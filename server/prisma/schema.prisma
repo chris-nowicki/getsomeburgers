@@ -1,0 +1,71 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int      @id @default(autoincrement())
+  first_name String
+  last_name  String
+  birthday   DateTime @db.Date
+  location   String
+  email      String   @unique
+  password   String
+  profilePic String?
+  posts      Post[]
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model Post {
+  id           Int         @id @default(autoincrement())
+  author       User?       @relation(fields: [authorId], references: [id])
+  authorId     Int?
+  burger       Burger?     @relation(fields: [burgerId], references: [id])
+  burgerId     Int?
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?
+  content      String?
+  burgerRating Int
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Restaurant {
+  id        Int                @id @default(autoincrement())
+  name      String
+  burgers   Burger[]
+  posts     Post[]
+  address   RestaurantAddress?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+model RestaurantAddress {
+  id           Int         @id @default(autoincrement())
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?        @unique
+  address1     String
+  address2     String
+  city         String
+  STATE        String
+  zip          Int
+}
+
+model Burger {
+  id           Int         @id @default(autoincrement())
+  name         String
+  restaurant   Restaurant? @relation(fields: [restaurantId], references: [id])
+  restaurantId Int?        @unique
+  picture      String?
+  posts        Post[]
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
