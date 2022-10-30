@@ -38,7 +38,7 @@ model Post {
   burger       Burger     @relation(fields: [burgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   burgerId     Int
   content      String?
-  burgerRating Int
+  burgerRating Float
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 }
@@ -53,9 +53,9 @@ model Restaurant {
 }
 
 model Burger {
-  id           Int        @id @default(autoincrement())
-  burgerName   String     @unique
-  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  id           Int        @id @default(autoincrement()) @unique
+  burgerName   String @unique
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   restaurantId Int
   picture      String?
   posts        Post[]

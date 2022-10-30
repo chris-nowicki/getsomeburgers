@@ -106,4 +106,19 @@ module.exports = {
 		res.clearCookie("usertoken");
 		res.sendStatus(200);
 	},
+
+	// user delete
+	delete: async (req, res) => {
+		const { id } = req.body;
+		try {
+			const deleteUser = await prisma.user.delete({
+				where: {
+					id: id,
+				},
+			});
+			res.json(deleteUser);
+		} catch (err) {
+			res.json(err);
+		}
+	},
 };
