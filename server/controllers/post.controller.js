@@ -150,8 +150,7 @@ module.exports = {
 			},
 		});
 
-		const count = userUniquePosts.length;
-		res.json({ uniqueCount: count });
+		res.json({ uniqueCount: userUniquePosts.length });
 	},
 
 	// delete post
