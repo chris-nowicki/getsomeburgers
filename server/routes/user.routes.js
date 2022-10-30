@@ -1,4 +1,5 @@
 const UserController = require("../controllers/user.controller");
+const PostController = require("../controllers/post.controller")
 
 // jwt authentication
 const { authenticate } = require("../middlewares/authenticateMiddleware")
@@ -18,5 +19,6 @@ module.exports = (app) => {
 	);
 	app.post("/api/users/login", UserController.login);
 	app.post("/api/users/logout", UserController.logout);
+	app.post("/api/posts/create", PostController.create);
 	// app.put('/api/users/profilePicture/:id', authenticate, UserController.updateProfilePicture)
 };

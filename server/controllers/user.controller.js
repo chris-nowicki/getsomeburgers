@@ -8,7 +8,6 @@ const prisma = new PrismaClient({
 });
 
 module.exports = {
-
 	// user registration
 	register: async (req, res) => {
 		const { first_name, last_name, location, email, password, profilePic } =
@@ -107,10 +106,4 @@ module.exports = {
 		res.clearCookie("usertoken");
 		res.sendStatus(200);
 	},
-
-	// create post
-	// 1. check if restaurant exists.  IF not, then create restaurant using form data AND create burger
-	// 2. if the restaurant EXISTS then return restaurant information and check for burger.
-	// 3. if burger doesn't exist create it.  if it does return burger information
-	// 4. Create post with required information.
 };
