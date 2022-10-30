@@ -11,6 +11,7 @@ const validation = require("../middlewares/validationMiddleware");
 
 // yup validation schemas
 const userSchema = require("../validations/userValidation");
+const postController = require("../controllers/post.controller");
 
 // routes
 module.exports = (app) => {
@@ -21,6 +22,9 @@ module.exports = (app) => {
 	);
 	app.post("/api/users/login", UserController.login);
 	app.post("/api/users/logout", UserController.logout);
+	app.get("/api/posts", postController.getAll);
+	app.get("/api/posts/user-total", postController.userTotalPosts);
+	app.get("/api/posts/user-unique", postController.userUniquePosts);
 	app.post("/api/posts/create", PostController.create);
 	app.put("/api/posts/update", PostController.update);
 	app.put("/api/burgers/update", BurgerController.update);

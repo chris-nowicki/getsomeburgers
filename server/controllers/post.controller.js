@@ -1,4 +1,5 @@
 const { PrismaClient } = require("@prisma/client");
+const { truncateSync } = require("fs");
 
 const prisma = new PrismaClient({
 	errorFormat: "pretty",
@@ -94,17 +95,7 @@ module.exports = {
 
 	// update post
 	update: async (req, res) => {
-		const {
-			restaurantId,
-			restaurantName,
-			burgerId,
-			burgerName,
-			picture,
-			email,
-			content,
-			burgerRating,
-			postId,
-		} = req.body;
+		const { content, burgerRating, postId } = req.body;
 
 		try {
 			const updatePost = await prisma.post.update({
@@ -120,6 +111,47 @@ module.exports = {
 		} catch (err) {
 			res.json(err);
 		}
+	},
+
+	//  get all posts
+	getAll: async (req, res) => {
+		const posts = await prisma.post.findMany({
+			include: { author: true, restaurant: true, burger: true },
+		});
+
+		res.json(posts);
+	},
+
+	// user total posts
+	userTotalPosts: async (req, res) => {
+		const { userId } = req.body;
+
+		const userTotalPosts = await prisma.post.count({
+			where: {
+				authorId: userId,
+			},
+		});
+		res.json({ totalCount: userTotalPosts });
+	},
+
+	// user unique posts
+	// a unique post is the first time a user rates a burger but does not count subsequent times the burger is rated
+	userUniquePosts: async (req, res) => {
+		const { userId } = req.body;
+
+		const userUniquePosts = await prisma.post.findMany({
+			where: {
+				authorId: userId,
+			},
+			distinct: ["burgerId"],
+			select: {
+				id: true,
+				burgerId: true,
+			},
+		});
+
+		const count = userUniquePosts.length;
+		res.json({ uniqueCount: count });
 	},
 
 	// delete post
