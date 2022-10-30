@@ -122,6 +122,7 @@ module.exports = {
 		}
 	},
 
+	// delete post
 	delete: async (req, res) => {
 		const { id } = req.body;
 		try {

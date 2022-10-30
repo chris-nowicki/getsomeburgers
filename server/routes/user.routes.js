@@ -29,6 +29,4 @@ module.exports = (app) => {
 	app.delete("/api/burgers/delete", BurgerController.delete);
 	app.delete("/api/restaurants/delete", RestaurantController.delete);
 	app.delete("/api/users/delete", UserController.delete);
-
-	// app.put('/api/users/profilePicture/:id', authenticate, UserController.updateProfilePicture)
 };

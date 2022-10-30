@@ -5,6 +5,7 @@ const prisma = new PrismaClient({
 });
 
 module.exports = {
+	// update restaurant
 	update: async (req, res) => {
 		const { restaurantId, restaurantName } = req.body;
 
@@ -23,8 +24,9 @@ module.exports = {
 		}
 	},
 
+	// delete restaurant
 	delete: async (req, res) => {
-		const { id } = req.body
+		const { id } = req.body;
 		try {
 			const deleteRestaurant = await prisma.restaurant.delete({
 				where: {

@@ -5,6 +5,7 @@ const prisma = new PrismaClient({
 });
 
 module.exports = {
+	// update burger
 	update: async (req, res) => {
 		const { burgerId, burgerName, picture } = req.body;
 
@@ -24,6 +25,7 @@ module.exports = {
 		}
 	},
 
+	// delete burger
 	delete: async (req, res) => {
 		const { id } = req.body;
 		try {
