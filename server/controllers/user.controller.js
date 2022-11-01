@@ -10,8 +10,7 @@ const prisma = new PrismaClient({
 module.exports = {
 	// user registration
 	register: async (req, res) => {
-		const { first_name, last_name, location, email, password, profilePic } =
-			req.body;
+		const { first_name, last_name, email, password } = req.body;
 
 		// check to see if email exists
 		const user = await prisma.user.findUnique({
@@ -31,20 +30,31 @@ module.exports = {
 					data: {
 						first_name,
 						last_name,
-						location,
 						email,
 						password: {
 							create: {
 								hash: hashedPassword,
 							},
 						},
-						profilePic,
 					},
 				});
-				res.json(user);
-			} catch (e) {
-				res.json(e);
-				console.log(e);
+
+				// if registration is successful create and return the session cookie
+				const userToken = jwt.sign(
+					{
+						id: user.id,
+					},
+					secret
+				);
+
+				res.cookie("usertoken", userToken, secret, {
+					httpOnly: true,
+				}).json({ msg: "success!", user: user });
+
+				// if there is an error then return the error
+			} catch (err) {
+				res.json(err);
+				console.log(err);
 			}
 		} else {
 			// error that is returned if email exists
@@ -88,8 +98,6 @@ module.exports = {
 		const userToken = jwt.sign(
 			{
 				id: user.id,
-				email: user.email,
-				first_name: user.first_name,
 			},
 			secret
 		);
@@ -98,6 +106,24 @@ module.exports = {
 		res.cookie("usertoken", userToken, secret, {
 			httpOnly: true,
 		}).json({ msg: "success!" });
+	},
+
+	// get logged in user
+	getLoggedInUser: async (req, res) => {
+		const decodeJWT = jwt.decode(req.cookies.usertoken, {
+			complete: true,
+		});
+
+		try {
+			const user = await prisma.user.findUnique({
+				where: {
+					id: decodeJWT.payload.id,
+				},
+			});
+			res.json(user);
+		} catch (err) {
+			res.json(err);
+		}
 	},
 
 	// user logout

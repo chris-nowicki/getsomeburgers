@@ -124,45 +124,51 @@ module.exports = {
 
 	// user total posts
 	userTotalPosts: async (req, res) => {
-		const { userId } = req.body;
-
-		const userTotalPosts = await prisma.post.count({
-			where: {
-				authorId: userId,
-			},
-		});
-		res.json({ totalCount: userTotalPosts });
+		const { id } = req.params;
+		try {
+			const userTotalPosts = await prisma.post.count({
+				where: {
+					authorId: Number(id),
+				},
+			});
+			res.json({ totalCount: userTotalPosts });
+		} catch (err) {
+			res.json(err);
+		}
 	},
 
 	// user unique posts
 	// a unique post is the first time a user rates a burger but does not count subsequent times the burger is rated
 	userUniquePosts: async (req, res) => {
-		const { userId } = req.body;
-
-		const userUniquePosts = await prisma.post.findMany({
-			where: {
-				authorId: userId,
-			},
-			distinct: ["burgerId"],
-			select: {
-				id: true,
-				burgerId: true,
-			},
-		});
-
-		res.json({ uniqueCount: userUniquePosts.length });
+		const { id } = req.params;
+		try {
+			const userUniquePosts = await prisma.post.findMany({
+				where: {
+					authorId: Number(id),
+				},
+				distinct: ["burgerId"],
+				select: {
+					id: true,
+					burgerId: true,
+				},
+			});
+			res.json({ uniqueCount: userUniquePosts.length });
+		} catch (err) {
+			res.json(err);
+		}
 	},
 
 	// delete post
 	delete: async (req, res) => {
-		const { id } = req.body;
+		const { id } = req.params;
 		try {
 			const deletePost = await prisma.post.delete({
 				where: {
-					id: id,
+					id: Number(id),
 				},
 			});
 			res.json(deletePost);
+			console.log(deletePost)
 		} catch (err) {
 			res.json(err);
 		}

@@ -12,7 +12,7 @@ const userSchema = yup.object({
 		last_name:
 			"Last Name is required and must be at least 2 characters long",
 	}),
-	location: yup.string().trim(),
+	location: yup.string().trim().optional(),
 	email: yup
 		.string()
 		.trim()
