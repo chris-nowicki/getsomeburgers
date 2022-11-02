@@ -10,15 +10,12 @@ function Post({
 	date,
 	author,
 	postId,
+	picture,
 }) {
 	const { user, posts, setPosts } = useContext(MyContext);
 
 	//get date from when post was created at through the date props
 	let convertedDate = new Date(date);
-
-	// get day of the week
-	const weekday = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-	let dayOfWeek = weekday[convertedDate.getDay()];
 
 	// get the month
 	let month = convertedDate.getMonth();
@@ -49,12 +46,13 @@ function Post({
 	return (
 		<>
 			{/* burger rating card */}
-			<div className="mb-10 flex w-full flex-col items-center rounded border-b bg-white pb-10">
+			<div className="mb-10 flex flex-col rounded border-b pb-10">
 				<div
-					className="justify -start flex
-								flex-row"
+					className="flex flex-row
+								justify-start"
 				>
-					<span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+
+					{/* <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
 						<svg
 							className="h-full w-full text-gray-300"
 							fill="currentColor"
@@ -62,16 +60,18 @@ function Post({
 						>
 							<path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
 						</svg>
-					</span>
-					<div className=" ml-4 flex flex-col">
-						<div className="flex flex-row items-center">
+					</span> */}
+					<img src="/images/profile-pic.jpg" className='avatar rounded-full ml-10'/>
+					<div className="ml-4 flex flex-col w-full">
+						<div className="mb-1 flex flex-row items-center justify-between mr-10">
 							<p className=" text-orange-400">
 								{month} {day}, {year}
 							</p>
+
+							{/* if the author_id matches the logged in user then add option to edit/delete the post. */}
 							{author === user.id && (
 								<>
 									<p className="ml-2">
-										<span className="mr-2">-</span>
 										<button
 											className="mr-1 hover:text-orange-400"
 											onClick={() => handleDelete()}
@@ -79,38 +79,45 @@ function Post({
 											delete
 										</button>
 										|
-										<button className="ml-2 hover:text-orange-400">
+										<a href={`edit-post/${postId}`} className="ml-2 hover:text-orange-400">
 											edit
-										</button>
+										</a>
 									</p>
 								</>
 							)}
 						</div>
-						<p className="mb-4 text-xl leading-tight">
+						<p className="mb-4 text-xl leading-tight mr-10">
 							{fname} is chowing down a {burgerName} from{" "}
 							{restaurantName}
 						</p>
 					</div>
 				</div>
-				<img src="https://via.placeholder.com/400.png" width="400" />
-				<div className="mt-2 flex w-1/4 flex-row justify-around text-2xl text-orange-400">
-					<span className="mx-1">
-						<ion-icon name="star" />
-					</span>
-					<span className="mx-1">
-						<ion-icon name="star" />
-					</span>
-					<span className="mx-1">
-						<ion-icon name="star" />
-					</span>
-					<span className="mx-1">
-						<ion-icon name="star" />
-					</span>
-					<span className="mx-1">
-						<ion-icon name="star-half" />
-					</span>
+				<div className="flex flex-row justify-center">
+					<img src={picture} className="burger" />
 				</div>
-				<p className="mt-4 w-3/4 text-center text-xl">{content}</p>
+
+				<div className="mt-2 flex  flex-row justify-center text-2xl text-orange-400">
+					<div>
+						<span className="mx-1">
+							<ion-icon name="star" />
+						</span>
+						<span className="mx-1">
+							<ion-icon name="star" />
+						</span>
+						<span className="mx-1">
+							<ion-icon name="star" />
+						</span>
+						<span className="mx-1">
+							<ion-icon name="star" />
+						</span>
+						<span className="mx-1">
+							<ion-icon name="star-half" />
+						</span>
+					</div>
+				</div>
+				<div className="flex w-full flex-row justify-center">
+					<p className="mt-4 w-3/4 text-center text-xl">{content}</p>
+				</div>
 			</div>
 		</>
 	);

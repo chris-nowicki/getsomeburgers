@@ -7,6 +7,8 @@ function ContextWrapper({ children }) {
 	const [totalRatings, setTotalRatings] = useState(0);
 	const [uniqueRatings, setUniqueRatings] = useState(0);
 	const [posts, setPosts] = useState([]);
+	const [open, setOpen] = useState(false);
+	const [errors, setErrors] = useState();
 
 	return (
 		<MyContext.Provider
@@ -21,6 +23,10 @@ function ContextWrapper({ children }) {
 				setLoaded,
 				posts,
 				setPosts,
+				open,
+				setOpen,
+				errors,
+				setErrors,
 			}}
 		>
 			{children}

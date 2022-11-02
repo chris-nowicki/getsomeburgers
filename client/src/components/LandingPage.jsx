@@ -1,14 +1,23 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import burger from "../images/cheeseburger-landing.jpg";
+import MyContext from "../contexts/MyContext";
 
 function LandingPage() {
+	const { setErrors } = useContext(MyContext);
+
+	// get one posts
+	useEffect(() => {
+		setErrors();
+		// eslint-disable-next-line
+	}, []);
+
 	// function for orange arrow on footer to scroll to the top
 	const handleScroll = () => {
 		document.documentElement.scrollTop = 0;
 	};
 
 	return (
-		<div className='container mx-auto w-3/4'>
+		<div className="container mx-auto w-3/4">
 			<div className="flex w-full flex-col">
 				{/* navigation */}
 				<nav className="flex w-full flex-row justify-between border-b-2 border-black pb-2">

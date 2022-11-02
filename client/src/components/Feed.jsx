@@ -1,19 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import MyContext from "../contexts/MyContext";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-
-import burgerIcon from "../images/hamburger-icon.png";
 import Post from "./Post";
 
 function Feed() {
-	const {
-		loaded,
-		setLoaded,
-		posts,
-		setPosts,
-	} = useContext(MyContext);
-	const navigate = useNavigate();
+	const { posts, setPosts, loaded } = useContext(MyContext);
 
 	// get all posts
 	useEffect(() => {
@@ -32,13 +23,19 @@ function Feed() {
 
 	return (
 		<div className="flex flex-col items-center">
-			{loaded && (
+			{loaded  && (
 				<>
 					{/* burger feed */}
 
-					<h1 className="mb-12 border-b pb-1 pt-6 text-4xl font-bold">
+					<h1 className="mb-4 border-b pb-1 pt-6 text-4xl font-bold">
 						Recent Activity
 					</h1>
+					<a
+						href="/dashboard/create-post"
+						className="mb-16 flex w-3/4 flex-row items-center justify-center rounded bg-orange-400 py-2 text-4xl text-white shadow shadow-black/25 hover:bg-orange-300 hover:font-bold hover:shadow-none"
+					>
+						<ion-icon name="add-circle-outline"></ion-icon>
+					</a>
 					{posts.map((post) => (
 						<Post
 							key={post.id}
@@ -49,6 +46,7 @@ function Feed() {
 							date={post.createdAt}
 							author={post.author.id}
 							postId={post.id}
+							picture={post.burger.picture}
 						/>
 					))}
 				</>

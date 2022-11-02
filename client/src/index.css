@@ -24,3 +24,20 @@ html {
 body {
     background-color: #f9fafb;
 }
+
+.burger {
+	width: 600px;
+	height: 300px;
+	object-fit: cover;
+}
+
+.profile-pic {
+	width: 300px;
+	height: 300px;
+	object-fit: cover;
+}
+.avatar {
+	width: 56px;
+	height: 56px;
+	object-fit: cover;
+}

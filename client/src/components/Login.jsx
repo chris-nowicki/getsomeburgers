@@ -24,7 +24,10 @@ function Login() {
 				navigate("/dashboard/feed");
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log(err.response.data);
+				if (err.response.data === "Unauthorized") {
+					setErrors({ message: "Invalid Email/Password" });
+				}
 			});
 	};
 
@@ -40,17 +43,33 @@ function Login() {
 					<img src={burgerIcon} alt="burger icon" />
 					<p className="ml-4 text-4xl">Get Some Burgers!</p>
 				</div>
-				<p className="ml-4 text-2xl text-center">Sign in to your account</p>
-				<p className="ml-4 text-xl text-center">
-					or <a href="/register">register</a>
+				<p className="ml-4 text-center text-2xl">
+					Sign in to your account
 				</p>
+				<p className="ml-4 text-center text-xl">
+					or{" "}
+					<a
+						href="/register"
+						className=" hover:text-orange-600"
+					>
+						register
+					</a>
+				</p>
+				{!errors ? (
+					<p className="hidden text-red-600">
+					</p>
+				) : (
+					<p className="my-6 text-2xl text-red-600 text-center">
+						{errors.message}
+					</p>
+				)}
 				<form onSubmit={handleSubmit}>
 					<Input
 						label="Email:"
 						type="text"
 						name="email"
 						onChangeProp={(e) => handleChange(e)}
-						errorProps={errors ? errors.email : false}
+						errorProps={false}
 					/>
 					<Input
 						label="Password:"
@@ -58,7 +77,7 @@ function Login() {
 						name="password"
 						value={user.password}
 						onChangeProp={(e) => handleChange(e)}
-						errorProps={errors ? errors.password : false}
+						errorProps={false}
 					/>
 					<button className="mt-3 w-full border border-black bg-white py-4 text-xl shadow-md shadow-black/25 transition-all ease-in-out hover:bg-orange-400 hover:text-white hover:shadow-none">
 						Sign In

@@ -79,7 +79,7 @@ module.exports = {
 		// if user is not found then return error
 		// this means either the email was not found
 		if (user === null) {
-			return res.sendStatus(400);
+			return res.sendStatus(401)
 		}
 
 		// if user is found then check to ensure the password entered at login
@@ -91,7 +91,8 @@ module.exports = {
 
 		// if password doesn't match then return an error
 		if (!correctPassword) {
-			return res.sendStatus(400);
+			return res
+				.sendStatus(401)
 		}
 
 		// if password does match then create the cookie

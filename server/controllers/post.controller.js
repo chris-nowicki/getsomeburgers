@@ -14,8 +14,13 @@ module.exports = {
 			picture,
 			email,
 			content,
-			burgerRating,
+			_burgerRating,
 		} = req.body;
+
+		const burgerRating = Number(_burgerRating);
+		console.log(typeof burgerRating);
+
+		console.log(req.body);
 
 		// check to see if the restaurant exists
 		const getRestaurant = await prisma.restaurant.findUnique({
@@ -114,8 +119,30 @@ module.exports = {
 	},
 
 	//  get all posts
+	getOne: async (req, res) => {
+		let { id } = req.params;
+
+		// convert the id to an integer
+		id = Number(id)
+
+		console.log(id)
+
+		const post = await prisma.post.findUnique({
+			where: {
+				id: id,
+			},
+			include: { author: true, restaurant: true, burger: true },
+		});
+
+		res.json(post);
+	},
+
+	//  get all posts
 	getAll: async (req, res) => {
 		const posts = await prisma.post.findMany({
+			orderBy: {
+				createdAt: "desc",
+			},
 			include: { author: true, restaurant: true, burger: true },
 		});
 
@@ -168,7 +195,7 @@ module.exports = {
 				},
 			});
 			res.json(deletePost);
-			console.log(deletePost)
+			console.log(deletePost);
 		} catch (err) {
 			res.json(err);
 		}

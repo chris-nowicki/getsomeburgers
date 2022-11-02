@@ -5,7 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function Navbar() {
-	const { user, setUser } = useContext(MyContext);
+	const { user, setUser, setLoaded } = useContext(MyContext);
 	const navigate = useNavigate();
 
 	const handleLogOut = () => {
@@ -17,6 +17,8 @@ function Navbar() {
 			)
 			.then((res) => {
 				setUser([]);
+				setLoaded(false)
+
 				navigate("/");
 			})
 			.catch((err) => console.log(err));
@@ -26,7 +28,7 @@ function Navbar() {
 		<>
 			{/* navigation */}
 			<nav className="z-0 flex w-full flex-row bg-white pb-2 pt-6 shadow-md">
-				<div className="container mx-auto flex w-3/4 flex-row items-center justify-between">
+				<div className="container mx-auto flex w-3/4 max-w-6xl flex-row items-center justify-between">
 					<div className="flex  items-center text-3xl">
 						<a
 							href="/dashboard"
@@ -43,7 +45,7 @@ function Navbar() {
 					<div className="dropdown mr-2 flex flex-col items-center">
 						{/* profile icon */}
 						<button className="z-20">
-							<span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
+							{/* <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
 								<svg
 									className="h-full w-full text-gray-300"
 									fill="currentColor"
@@ -51,7 +53,8 @@ function Navbar() {
 								>
 									<path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
 								</svg>
-							</span>
+							</span> */}
+							<img src="/images/profile-pic.jpg" className='avatar rounded-full' />
 						</button>
 
 						{/* dropdown hidden user menu */}

@@ -6,13 +6,16 @@ import burgerIcon from "../images/hamburger-icon.png";
 import { useNavigate } from "react-router-dom";
 
 function Register() {
-	const { user, setUser } = useContext(MyContext);
-	const [errors, setErrors] = useState([]);
+	const { user, setUser, errors, setErrors } = useContext(MyContext);
+
 	const navigate = useNavigate();
 
 	// submit registration form function
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		if (user.length === 0) {
+			navigate("/");
+		}
 
 		axios
 			.post("http://localhost:8000/api/users/register", user, {
@@ -20,11 +23,22 @@ function Register() {
 			})
 			.then((user) => {
 				console.log(user.data);
-				setErrors([]);
-				navigate("/dashboard");
+				setErrors({});
+				navigate("/dashboard/feed");
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log(err.response);
+				let newErrors;
+				if (!err.response.data.errors) {
+					newErrors = err.response.data.error.errors;
+					let registerErrors = Object.assign({}, ...newErrors);
+					setErrors(registerErrors);
+				} else {
+					newErrors = err.response.data.errors.email.message;
+					setErrors({email: newErrors})
+					console.log(newErrors)
+				}
+
 			});
 	};
 
