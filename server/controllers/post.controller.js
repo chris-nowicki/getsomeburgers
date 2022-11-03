@@ -11,16 +11,13 @@ module.exports = {
 		const {
 			restaurantName,
 			burgerName,
-			picture,
+			burgerPicture,
 			email,
 			content,
 			_burgerRating,
 		} = req.body;
 
 		const burgerRating = Number(_burgerRating);
-		console.log(typeof burgerRating);
-
-		console.log(req.body);
 
 		// check to see if the restaurant exists
 		const getRestaurant = await prisma.restaurant.findUnique({
@@ -37,7 +34,11 @@ module.exports = {
 					burgers: {
 						create: {
 							burgerName: burgerName,
-							picture,
+							pictures: {
+								create: {
+									burgerPicture: burgerPicture,
+								},
+							},
 						},
 					},
 				},
@@ -84,12 +85,18 @@ module.exports = {
 							burgerName: burgerName,
 						},
 					},
+					burgerPicture: {
+						connect: {
+							burgerPicture: burgerPicture,
+						},
+					},
 					content,
 					burgerRating,
 				},
 				include: {
 					restaurant: true,
 					burger: true,
+					burgerPicture: true,
 				},
 			});
 			res.json(post);
@@ -100,12 +107,14 @@ module.exports = {
 
 	// update post
 	update: async (req, res) => {
-		const { content, burgerRating, postId } = req.body;
+		const { content, _burgerRating, id } = req.body;
+
+		const burgerRating = Number(_burgerRating);
 
 		try {
 			const updatePost = await prisma.post.update({
 				where: {
-					id: postId,
+					id: id,
 				},
 				data: {
 					content,
@@ -123,15 +132,18 @@ module.exports = {
 		let { id } = req.params;
 
 		// convert the id to an integer
-		id = Number(id)
-
-		console.log(id)
+		id = Number(id);
 
 		const post = await prisma.post.findUnique({
 			where: {
 				id: id,
 			},
-			include: { author: true, restaurant: true, burger: true },
+			include: {
+				author: true,
+				restaurant: true,
+				burger: true,
+				burgerPicture: true,
+			},
 		});
 
 		res.json(post);
@@ -143,7 +155,12 @@ module.exports = {
 			orderBy: {
 				createdAt: "desc",
 			},
-			include: { author: true, restaurant: true, burger: true },
+			include: {
+				author: true,
+				restaurant: true,
+				burger: true,
+				burgerPicture: true,
+			},
 		});
 
 		res.json(posts);
@@ -195,7 +212,6 @@ module.exports = {
 				},
 			});
 			res.json(deletePost);
-			console.log(deletePost);
 		} catch (err) {
 			res.json(err);
 		}

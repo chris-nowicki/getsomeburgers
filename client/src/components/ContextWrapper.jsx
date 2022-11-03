@@ -9,6 +9,7 @@ function ContextWrapper({ children }) {
 	const [posts, setPosts] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [errors, setErrors] = useState();
+	const [restaurantNames, setRestaurantNames] = useState([])
 
 	return (
 		<MyContext.Provider
@@ -27,6 +28,8 @@ function ContextWrapper({ children }) {
 				setOpen,
 				errors,
 				setErrors,
+				restaurantNames,
+				setRestaurantNames
 			}}
 		>
 			{children}

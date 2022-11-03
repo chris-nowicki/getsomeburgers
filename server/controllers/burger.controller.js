@@ -7,7 +7,8 @@ const prisma = new PrismaClient({
 module.exports = {
 	// update burger
 	update: async (req, res) => {
-		const { burgerId, burgerName, picture } = req.body;
+		const { burgerId, burgerName, burgerPictureId, burgerPicture } =
+			req.body;
 
 		try {
 			const updateBurger = await prisma.burger.update({
@@ -16,7 +17,19 @@ module.exports = {
 				},
 				data: {
 					burgerName,
-					picture,
+					pictures: {
+						update: {
+							where: {
+								id: burgerPictureId,
+							},
+							data: {
+								burgerPicture: burgerPicture,
+							},
+						},
+					},
+				},
+				include: {
+					pictures: true,
 				},
 			});
 			res.json(updateBurger);

@@ -7,7 +7,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditModal from "./EditModal.jsx";
 
 function EditPost() {
-	const { errors, setOpen, open } = useContext(MyContext);
+	const { errors, setErrors } = useContext(MyContext);
 	const [post, setPost] = useState();
 	const [loaded, setLoaded] = useState(false);
 	const navigate = useNavigate();
@@ -21,11 +21,12 @@ function EditPost() {
 				setPost({
 					id: res.data.id,
 					content: res.data.content,
-					restaurantName: res.data.restaurant.restaurantName,
-					burgerName: res.data.burger.burgerName,
-					_burgerRating: res.data.burgerRating,
-					picture: res.data.burger.picture,
+					burgerRating: res.data.burgerRating,
 					burgerId: res.data.burger.id,
+					burgerName: res.data.burger.burgerName,
+					burgerPictureId: res.data.burgerPicture.id,
+					picture: res.data.burgerPicture.burgerPicture,
+					restaurantName: res.data.restaurant.restaurantName,
 					restaurantId: res.data.restaurant.id,
 				});
 				setLoaded(true);
@@ -41,18 +42,18 @@ function EditPost() {
 
 		axios
 			.put("http://localhost:8000/api/posts/update", {
+				id: post.id,
 				content: post.content,
-				burgerRating: post.burgerRating,
-				postId: post.id,
+				_burgerRating: post.burgerRating,
 			})
 			.then((res) => {
 				console.log(res.data);
-
 				axios
 					.put("http://localhost:8000/api/burgers/update", {
-						burgerName: post.burgerName,
-						picture: post.picture,
 						burgerId: post.burgerId,
+						burgerName: post.burgerName,
+						burgerPictureId: post.burgerPictureId,
+						burgerPicture: post.picture,
 					})
 					.then((res) => {
 						console.log(res.data);
@@ -65,13 +66,34 @@ function EditPost() {
 								}
 							)
 							.then((res) => {
-								console.log(res.data)
-								navigate("feed")
+								console.log(res.data);
+								navigate("feed");
+							})
+							.catch((err) => {
+								let parsedErrors = Object.assign(
+									{},
+									...err.response.data.error.errors
+								);
+								setErrors(parsedErrors);
+								console.log(errors);
 							});
-					});
+					})
+					.catch((err) => {
+						let parsedErrors = Object.assign(
+							{},
+							...err.response.data.error.errors
+						);
+						setErrors(parsedErrors);
+						console.log(errors);
+					})
 			})
 			.catch((err) => {
-				console.log(err);
+				let parsedErrors = Object.assign(
+					{},
+					...err.response.data.error.errors
+				);
+				setErrors(parsedErrors);
+				console.log(errors);
 			});
 	};
 
@@ -103,10 +125,10 @@ function EditPost() {
 						<Input
 							label="Rating"
 							type="number"
-							name="_burgerRating"
+							name="burgerRating"
 							value={post.burgerRating}
 							onChangeProp={(e) => handleChange(e)}
-							errorProps={errors ? errors.burgerName : false}
+							errorProps={errors ? errors.burgerRating : false}
 						/>
 						<Input
 							label="Photo"
@@ -122,7 +144,7 @@ function EditPost() {
 							value={post.content}
 							rows="4"
 							onChangeProp={(e) => handleChange(e)}
-							errorProps={errors ? errors.content : false}
+							errorProps={errors ? errors.comment : false}
 						/>
 						<button className="w-full bg-orange-400 p-4 text-xl text-white shadow shadow-black/25 hover:bg-orange-300 hover:shadow-none">
 							Submit

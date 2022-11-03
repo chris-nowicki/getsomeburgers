@@ -5,6 +5,24 @@ const prisma = new PrismaClient({
 });
 
 module.exports = {
+	// get restaurant names
+	getRestaurantNames: async (req, res) => {
+		try {
+			const getRestaurantNames = await prisma.restaurant.findMany({
+				orderBy: {
+					restaurantName: "asc"
+				},
+				select: {
+					id: true,
+					restaurantName: true
+				}
+			});
+			res.json(getRestaurantNames);
+		} catch (err) {
+			res.json(err);
+		}
+	},
+
 	// update restaurant
 	update: async (req, res) => {
 		const { restaurantId, restaurantName } = req.body;

@@ -21,7 +21,8 @@ function CreatePost() {
 			navigate("/dashboard/feed")
 		})
 		.catch(err => {
-			console.log(err)
+			let parsedErrors = Object.assign({}, ...err.response.data.error.errors)
+			setErrors(parsedErrors)
 		})
 	};
 
@@ -50,15 +51,13 @@ function CreatePost() {
 					label="Rating"
 					type="number"
 					name="_burgerRating"
-					min=".5"
-					max="5"
 					onChangeProp={(e) => handleChange(e)}
 					errorProps={errors ? errors.burgerName : false}
 				/>
 				<Input
 					label="Photo"
 					type="text"
-					name="picture"
+					name="burgerPicture"
 					onChangeProp={(e) => handleChange(e)}
 					errorProps={errors ? errors.photo : false}
 				/>
@@ -67,7 +66,7 @@ function CreatePost() {
 					name="content"
 					rows="4"
 					onChangeProp={(e) => handleChange(e)}
-					errorProps={errors ? errors.content : false}
+					errorProps={errors ? errors.comment : false}
 				/>
 				<button className="w-full bg-orange-400 p-4 text-xl text-white shadow shadow-black/25 hover:bg-orange-300 hover:shadow-none">
 					Submit

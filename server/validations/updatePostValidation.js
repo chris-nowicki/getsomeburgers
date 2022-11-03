@@ -2,7 +2,7 @@ const yup = require("yup");
 
 const updatePostSchema = yup.object({
 	_burgerRating: yup
-		.number({burgerRating: "Burger rating is required and must be a number"})
+		.string()
 		.required({
 			burgerRating: "Burger rating is required",
 		}),

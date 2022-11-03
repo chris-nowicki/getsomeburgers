@@ -8,6 +8,7 @@ import Login from "./components/Login";
 import Feed from "./components/Feed";
 import CreatePost from "./components/CreatePost";
 import EditPost from "./components/EditPost";
+import Test from "./components/Test";
 
 function App() {
 	return (
@@ -23,6 +24,7 @@ function App() {
 							<Route path="feed" index element={<Feed />} default />
 							<Route path="create-post" index element={<CreatePost />} default />
 							<Route path="edit-post/:id" index element={<EditPost />} default />
+							<Route path="test" index element={<Test />} default />
 						</Route>
 					</Routes>
 				</Router>

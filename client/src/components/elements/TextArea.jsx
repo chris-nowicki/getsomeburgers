@@ -20,7 +20,7 @@ export const TextArea = ({
 					className={
 						!errorProps
 							? "block w-full rounded-md border-black text-xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500 "
-							: "block w-full rounded-md border-red-300 pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-sm"
+							: "block w-full rounded-md border-red-300 text-xl pr-10 text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500"
 					}
 					placeholder=""
 					value={value}
@@ -37,7 +37,7 @@ export const TextArea = ({
 			</div>
 			{errorProps && (
 				<p className="mt-1 text-sm text-red-600" id="email-error">
-					{errorProps.message}
+					{errorProps}
 				</p>
 			)}
 		</div>
