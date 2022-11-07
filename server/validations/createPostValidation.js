@@ -22,10 +22,10 @@ const createPostSchema = yup.object({
 		}),
 	_burgerRating: yup
 		.number({
-			burgerRating: "Burger rating is required and must be a number",
+			_burgerRating: "Burger rating is required and must be a number",
 		})
 		.required({
-			burgerRating: "Burger rating is required",
+			_burgerRating: "Burger rating is required",
 		}),
 	content: yup
 		.string()

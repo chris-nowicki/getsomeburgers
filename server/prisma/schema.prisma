@@ -15,6 +15,7 @@ model User {
   first_name String
   last_name  String
   email      String    @unique
+  profile    Profile?
   password   Password?
   posts      Post[]
   created_at DateTime  @default(now())
@@ -27,20 +28,27 @@ model Password {
   userId Int    @unique
 }
 
+model Profile {
+  profilePicture String?
+  location       String?
+  user           User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId         Int  @unique
+}
+
 model Post {
-  id              Int           @id @unique @default(autoincrement())
-  author          User          @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  authorId        Int
-  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  restaurantId    Int
-  burger          Burger        @relation(fields: [burgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  burgerId        Int
-  burgerPicture   burgerPicture @relation(fields: [burgerPictureId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  burgerPictureId Int           @unique
-  content         String?
-  burgerRating    Float
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  id           Int            @id @default(autoincrement())
+  author       User           @relation(fields: [authorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  authorId     Int
+  restaurant   Restaurant     @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  restaurantId Int
+  burger       Burger         @relation(fields: [burgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  burgerId     Int
+  burgerPic    burgerPicture? @relation(fields: [burgerPicId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  burgerPicId  Int            @unique
+  content      String?
+  burgerRating Float
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
 }
 
 model Restaurant {
@@ -53,20 +61,20 @@ model Restaurant {
 }
 
 model Burger {
-  id           Int             @id @unique @default(autoincrement())
-  burgerName   String          @unique
-  restaurant   Restaurant      @relation(fields: [restaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  restaurantId Int
-  pictures     burgerPicture[]
-  posts        Post[]
-  createdAt    DateTime        @default(now())
-  updatedAt    DateTime        @updatedAt
+  id                  Int             @id @unique @default(autoincrement())
+  burgerName          String
+  relatedRestaurant   Restaurant      @relation(fields: [relatedRestaurantId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  relatedRestaurantId Int
+  pictures            burgerPicture[]
+  posts               Post[]
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
 }
 
 model burgerPicture {
-  id            Int     @id @unique @default(autoincrement())
-  burgerPicture String? @unique
-  burger        Burger  @relation(fields: [burgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  burgerId      Int 
-  post          Post?
+  id              Int     @id @unique @default(autoincrement())
+  burgerPicture   String?
+  relatedBurger   Burger  @relation(fields: [relatedBurgerId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  relatedBurgerId Int
+  post            Post?
 }

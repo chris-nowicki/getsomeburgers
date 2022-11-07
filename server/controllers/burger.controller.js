@@ -9,7 +9,6 @@ module.exports = {
 	update: async (req, res) => {
 		const { burgerId, burgerName, burgerPictureId, burgerPicture } =
 			req.body;
-
 		try {
 			const updateBurger = await prisma.burger.update({
 				where: {
@@ -48,6 +47,33 @@ module.exports = {
 				},
 			});
 			res.json(deleteBurger);
+		} catch (err) {
+			res.json(err);
+		}
+	},
+	// findOne
+	createBurger: async (req, res) => {
+		const { restaurantName, burgerName, burgerPicture, id } = req.body;
+		console.log(req.body);
+		try {
+			const createBurger = await prisma.restaurant.update({
+				where: {
+					id: id,
+				},
+				data: {
+					burgers: {
+						create: {
+							burgerName: burgerName,
+							pictures: {
+								create: {
+									burgerPicture: burgerPicture,
+								},
+							},
+						},
+					},
+				},
+			});
+			res.json(createdBurger);
 		} catch (err) {
 			res.json(err);
 		}

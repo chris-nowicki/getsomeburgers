@@ -36,6 +36,15 @@ module.exports = {
 								hash: hashedPassword,
 							},
 						},
+						profile: {
+							create: {
+								profilePicture:
+									"/images/person-placeholder.jpg",
+							},
+						},
+					},
+					include: {
+						profile: true,
 					},
 				});
 
@@ -79,7 +88,7 @@ module.exports = {
 		// if user is not found then return error
 		// this means either the email was not found
 		if (user === null) {
-			return res.sendStatus(401)
+			return res.sendStatus(401);
 		}
 
 		// if user is found then check to ensure the password entered at login
@@ -91,8 +100,7 @@ module.exports = {
 
 		// if password doesn't match then return an error
 		if (!correctPassword) {
-			return res
-				.sendStatus(401)
+			return res.sendStatus(401);
 		}
 
 		// if password does match then create the cookie
@@ -120,6 +128,9 @@ module.exports = {
 				where: {
 					id: decodeJWT.payload.id,
 				},
+				include: {
+					profile: true,
+				},
 			});
 			res.json(user);
 		} catch (err) {
@@ -134,9 +145,42 @@ module.exports = {
 		res.sendStatus(200);
 	},
 
+	// user update
+	update: async (req, res) => {
+		const { id, first_name, last_name, email, location } =
+			req.body;
+		console.log(req.body);
+
+		try {
+			const updateUser = await prisma.user.update({
+				where: {
+					id: id,
+				},
+				data: {
+					first_name,
+					last_name,
+					email,
+					profile: {
+						update: {
+							location: location,
+						},
+					},
+				},
+				include: {
+					profile: true,
+				},
+			});
+			res.json(updateUser);
+		} catch (err) {
+			res.json(err);
+		}
+	},
+
 	// user delete
 	delete: async (req, res) => {
-		const { id } = req.body;
+		let { id } = req.params;
+		id = Number(id);
+		console.log(id);
 		try {
 			const deleteUser = await prisma.user.delete({
 				where: {

@@ -46,7 +46,7 @@ function Feed() {
 							date={post.createdAt}
 							author={post.author.id}
 							postId={post.id}
-							picture={post.burgerPicture.burgerPicture}
+							picture={post.burgerPic.burgerPicture}
 						/>
 					))}
 				</>

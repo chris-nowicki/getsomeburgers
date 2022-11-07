@@ -15,7 +15,6 @@ function Dashboard() {
 		setUniqueRatings,
 		loaded,
 		setLoaded,
-		setPosts,
 	} = useContext(MyContext);
 	const navigate = useNavigate();
 
@@ -26,6 +25,7 @@ function Dashboard() {
 				withCredentials: true,
 			})
 			.then((res) => {
+				console.log(res.data);
 				setUser(res.data);
 				setLoaded(true);
 			})
@@ -36,7 +36,6 @@ function Dashboard() {
 
 		// eslint-disable-next-line
 	}, []);
-
 
 	const getPostStats = () => {
 		axios
@@ -73,17 +72,19 @@ function Dashboard() {
 							<div className="flex w-2/4 flex-col items-center">
 								{/* profile picture and location */}
 								<img
-									src="/images/profile-pic.jpg"
+									src={user.profile.profilePicture}
 									alt="profile"
 									className="profile-pic rounded-lg"
 								/>
 								<p className="text-center text-xl">
 									{user.first_name} {user.last_name}
 								</p>
-								<p className="flex flex-row items-center justify-center text-sm text-orange-400">
-									<ion-icon name="location-outline"></ion-icon>
-									<span>Cleveland, TN</span>
-								</p>
+								{user.profile.location !== null && (
+									<p className="flex flex-row items-center justify-center text-sm text-orange-400">
+										<ion-icon name="location-outline"></ion-icon>
+										<span>{user.profile.location}</span>
+									</p>
+								)}
 
 								{/* total and unique burger rating count */}
 								<div className="mt-10 flex w-full flex-col items-center rounded border bg-white shadow shadow-black/25">

@@ -1,5 +1,4 @@
 const { PrismaClient } = require("@prisma/client");
-const { truncateSync } = require("fs");
 
 const prisma = new PrismaClient({
 	errorFormat: "pretty",
@@ -19,6 +18,11 @@ module.exports = {
 
 		const burgerRating = Number(_burgerRating);
 
+		// set variable to hold the burgerId and burgerPictureId
+		let burgerId;
+		let burgerPictureId;
+		let restaurantId;
+
 		// check to see if the restaurant exists
 		const getRestaurant = await prisma.restaurant.findUnique({
 			where: {
@@ -28,7 +32,7 @@ module.exports = {
 
 		// if it doesn't exist then create the restaurant and burger
 		if (getRestaurant === null) {
-			await prisma.restaurant.create({
+			let result = await prisma.restaurant.create({
 				data: {
 					restaurantName: restaurantName,
 					burgers: {
@@ -42,26 +46,73 @@ module.exports = {
 						},
 					},
 				},
+				include: {
+					burgers: {
+						include: {
+							pictures: true,
+						},
+					},
+				},
 			});
+			burgerId = result.burgers[0].id;
+			burgerPictureId = result.burgers[0].pictures[0].id;
+			restaurantId = result.id;
 		} else {
 			// if the restaurant exists
 			// check if the burger exists
-			const getBurger = await prisma.burger.findUnique({
+			const getBurger = await prisma.burger.findFirst({
 				where: {
 					burgerName: burgerName,
 				},
 			});
 
-			// if the burger doesn't exist then create it and link it to the restaurant
+			// if the burger doesn't exist then create it and link it to the restaurant]
+			console.log('we get here')
+			restaurantId = getRestaurant.id;
 			if (getBurger === null) {
-				await prisma.burger.create({
+				let result = await prisma.restaurant.update({
+					where: {
+						id: restaurantId,
+					},
 					data: {
-						burgerName: burgerName,
-						restaurant: {
-							connect: { restaurantName: restaurantName },
+						burgers: {
+							create: {
+								burgerName: burgerName,
+								pictures: {
+									create: {
+										burgerPicture: burgerPicture,
+									},
+								},
+							},
+						},
+					},
+					include: {
+						burgers: {
+							include: {
+								pictures: true,
+							},
 						},
 					},
 				});
+				burgerId = result.burgers[0].id;
+				burgerPictureId = result.burgers[0].pictures[0].id;
+			} else {
+				// update the burger to add the burger picture
+				burgerId = getBurger.id;
+				const newBurgerPicture = await prisma.burgerPicture.create({
+					data: {
+						burgerPicture: burgerPicture,
+						relatedBurger: {
+							connect: {
+								id: burgerId,
+							},
+						},
+					},
+					include: {
+						relatedBurger: true,
+					},
+				});
+				burgerPictureId = newBurgerPicture.id;
 			}
 		}
 
@@ -77,17 +128,17 @@ module.exports = {
 					},
 					restaurant: {
 						connect: {
-							restaurantName: restaurantName,
+							id: restaurantId,
 						},
 					},
 					burger: {
 						connect: {
-							burgerName: burgerName,
+							id: burgerId,
 						},
 					},
-					burgerPicture: {
+					burgerPic: {
 						connect: {
-							burgerPicture: burgerPicture,
+							id: burgerPictureId,
 						},
 					},
 					content,
@@ -96,7 +147,7 @@ module.exports = {
 				include: {
 					restaurant: true,
 					burger: true,
-					burgerPicture: true,
+					burgerPic: true,
 				},
 			});
 			res.json(post);
@@ -142,7 +193,7 @@ module.exports = {
 				author: true,
 				restaurant: true,
 				burger: true,
-				burgerPicture: true,
+				burgerPic: true,
 			},
 		});
 
@@ -159,7 +210,7 @@ module.exports = {
 				author: true,
 				restaurant: true,
 				burger: true,
-				burgerPicture: true,
+				burgerPic: true,
 			},
 		});
 

@@ -6,24 +6,59 @@ import { TextArea } from "./elements/TextArea";
 import { useNavigate } from "react-router-dom";
 
 function CreatePost() {
-	const { errors, setErrors, user, posts, setPosts } = useContext(MyContext);
+	const { errors, setErrors, user } = useContext(MyContext);
 	const [newPost, setNewPost] = useState([]);
-	const navigate = useNavigate()
+	const [fileUpload, setFileUpload] = useState(null)
+	const navigate = useNavigate();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
 		e.preventDefault();
-		axios.post(
-			"http://localhost:8000/api/posts/create",
-			{...newPost, email: user.email }
-		)
-		.then(res => {
-			console.log(res)
-			navigate("/dashboard/feed")
-		})
-		.catch(err => {
-			let parsedErrors = Object.assign({}, ...err.response.data.error.errors)
-			setErrors(parsedErrors)
-		})
+
+		let url
+
+		// selects the value of the picture file from the input form
+		const selectedFile = document.getElementById("file_input").files[0];
+
+		// get secure s3 url
+		await axios
+			.get("http://localhost:8000/s3Url", { withCredentials: true })
+			.then((res) => {
+				url = (res.data.url)
+			})
+			.catch((err) => {
+				console.log(err.response.data);
+			});
+
+		// upload picture to s3 url
+		axios.put(
+			url,
+			selectedFile,
+			{ headers: { "Content-Type": "multipart/form-data" } },
+			{ withCredentials: true }
+		);
+
+		// parse out the image url link and update the burger picture image link to uploaded picture
+		const imageUrl = url.split("?")[0];
+
+		axios
+			.post("http://localhost:8000/api/posts/create", {
+				...newPost,
+				email: user.email,
+				burgerPicture: imageUrl,
+			})
+			.then((res) => {
+				console.log(res);
+				setTimeout(function(){
+					navigate('feed')
+				}, 1300)
+			})
+			.catch((err) => {
+				let parsedErrors = Object.assign(
+					{},
+					...err.response.data.error.errors
+				);
+				setErrors(parsedErrors);
+			});
 	};
 
 	const handleChange = (e) => {
@@ -52,15 +87,30 @@ function CreatePost() {
 					type="number"
 					name="_burgerRating"
 					onChangeProp={(e) => handleChange(e)}
-					errorProps={errors ? errors.burgerName : false}
+					errorProps={errors ? errors._burgerRating : false}
 				/>
-				<Input
-					label="Photo"
-					type="text"
+
+				{/* file upload */}
+
+				<label
+					className="mb-2 block text-xl text-gray-900 dark:text-gray-300"
+				>
+					Upload picture
+				</label>
+				<input
+					className="block w-full cursor-pointer rounded-lg border border-black bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400"
+					aria-describedby="file_input_help"
+					id="file_input"
+					type="file"
 					name="burgerPicture"
-					onChangeProp={(e) => handleChange(e)}
-					errorProps={errors ? errors.photo : false}
 				/>
+				<p
+					className="mt-1 mb-3 text-sm text-gray-500 dark:text-gray-300"
+					id="file_input_help"
+				>
+					PNG, JPG (MAX. 800x400px).
+				</p>
+				{/* file upload end */}
 				<TextArea
 					label="Comment"
 					name="content"

@@ -8,11 +8,10 @@ import Login from "./components/Login";
 import Feed from "./components/Feed";
 import CreatePost from "./components/CreatePost";
 import EditPost from "./components/EditPost";
-import Test from "./components/Test";
+import UserSettings from "./components/UserSettings";
 
 function App() {
 	return (
-		// <div className="container mx-auto w-3/4">
 		<div>
 			<ContextWrapper>
 				<Router>
@@ -21,10 +20,27 @@ function App() {
 						<Route path="/register" element={<Register />} />
 						<Route path="/login" element={<Login />} />
 						<Route path="/dashboard" element={<Dashboard />}>
-							<Route path="feed" index element={<Feed />} default />
-							<Route path="create-post" index element={<CreatePost />} default />
-							<Route path="edit-post/:id" index element={<EditPost />} default />
-							<Route path="test" index element={<Test />} default />
+							<Route
+								path="feed"
+								index
+								element={<Feed />}
+								default
+							/>
+							<Route
+								path="create-post"
+								index
+								element={<CreatePost />}
+							/>
+							<Route
+								path="edit-post/:id"
+								index
+								element={<EditPost />}
+							/>
+							<Route
+								path="settings"
+								index
+								element={<UserSettings />}
+							/>
 						</Route>
 					</Routes>
 				</Router>

@@ -18,14 +18,15 @@ function EditPost() {
 		axios
 			.get(`http://localhost:8000/api/posts/${id}`)
 			.then((res) => {
+				console.log(res.data);
 				setPost({
 					id: res.data.id,
 					content: res.data.content,
 					burgerRating: res.data.burgerRating,
 					burgerId: res.data.burger.id,
 					burgerName: res.data.burger.burgerName,
-					burgerPictureId: res.data.burgerPicture.id,
-					picture: res.data.burgerPicture.burgerPicture,
+					burgerPictureId: res.data.burgerPic.id,
+					picture: res.data.burgerPic.burgerPicture,
 					restaurantName: res.data.restaurant.restaurantName,
 					restaurantId: res.data.restaurant.id,
 				});
@@ -85,7 +86,7 @@ function EditPost() {
 						);
 						setErrors(parsedErrors);
 						console.log(errors);
-					})
+					});
 			})
 			.catch((err) => {
 				let parsedErrors = Object.assign(
