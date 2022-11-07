@@ -3,7 +3,6 @@ import MyContext from "../contexts/MyContext";
 import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import profilePlaceholder from "../images/person-placeholder.jpg";
 
 function Dashboard() {
 	const {
@@ -15,6 +14,7 @@ function Dashboard() {
 		setUniqueRatings,
 		loaded,
 		setLoaded,
+		setRestaurantList,
 	} = useContext(MyContext);
 	const navigate = useNavigate();
 
@@ -37,9 +37,24 @@ function Dashboard() {
 		// eslint-disable-next-line
 	}, []);
 
+	// get list of restaurants
+	useEffect(() => {
+		axios
+			.get("http://localhost:8000/api/restaurants", {
+				withCredentials: true,
+			})
+			.then((res) => {
+				setRestaurantList(res.data)
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		// eslint-disable-next-line
+	}, []);
+
 	const getPostStats = () => {
 		axios
-			.get(`http://localhost:8000/api/posts/user-total/${user.id}`)
+			.get(`http://localhost:8000/api/posts/user-total/${user.id}`, {withCredentials: true})
 			.then((res) => {
 				setTotalRatings(res.data.totalCount);
 			})

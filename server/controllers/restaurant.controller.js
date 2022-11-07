@@ -10,12 +10,12 @@ module.exports = {
 		try {
 			const getRestaurantNames = await prisma.restaurant.findMany({
 				orderBy: {
-					restaurantName: "asc"
+					restaurantName: "asc",
 				},
 				select: {
 					id: true,
-					restaurantName: true
-				}
+					restaurantName: true,
+				},
 			});
 			res.json(getRestaurantNames);
 		} catch (err) {
@@ -23,22 +23,67 @@ module.exports = {
 		}
 	},
 
-	// update restaurant
-	update: async (req, res) => {
-		const { restaurantId, restaurantName } = req.body;
+	// get one restaurant
+	getOne: async (req, res) => {
+		const { name } = req.params;
 
 		try {
-			const updateRestaurant = await prisma.restaurant.update({
+			const getRestaurant = await prisma.restaurant.findUnique({
 				where: {
-					id: restaurantId,
-				},
-				data: {
-					restaurantName,
+					restaurantName: name,
 				},
 			});
-			res.json(updateRestaurant);
+			res.json(getRestaurant);
 		} catch (err) {
 			res.json(err);
+		}
+	},
+
+	// update restaurant
+	update: async (req, res) => {
+		const { restaurantId, restaurantName, postId, oldRestaurant } = req.body;
+
+		const getRestaurant = await prisma.restaurant.findUnique({
+			where: {
+				restaurantName: restaurantName,
+			},
+		});
+
+		if (getRestaurant === null) {
+			try {
+				const updateRestaurant = await prisma.restaurant.update({
+					where: {
+						id: restaurantId,
+					},
+					data: {
+						restaurantName: restaurantName,
+					},
+				});
+				res.json(updateRestaurant);
+			} catch (err) {
+				res.json(err);
+			}
+		} else {
+			try {
+				const updateRestaurant = await prisma.restaurant.update({
+					where: {
+						restaurantName: restaurantName,
+					},
+					data: {
+						posts: {
+							connect: {
+								id: postId
+							},
+						},
+					},
+					include: {
+						posts: true,
+					},
+				})
+				res.json(updateRestaurant)
+			} catch (err) {
+				res.json(err)
+			}
 		}
 	},
 

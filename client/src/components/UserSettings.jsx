@@ -13,32 +13,36 @@ function UserSettings() {
 	// set current user state to updatedUser
 	// load the page when state is set
 	useEffect(() => {
-		let userProfile = {...user}
-		userProfile.location = userProfile.profile.location
-		setUpdatedUser(userProfile)
+		let userProfile = { ...user };
+		userProfile.location = userProfile.profile.location;
+		setUpdatedUser(userProfile);
 		setLoaded(true);
+		// eslint-disable-next-line
 	}, []);
 
 	// update all user information other than profile picture
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(updatedUser.location)
 
 		axios
-			.put("http://localhost:8000/api/users/update", {
-				id: user.id,
-				first_name: updatedUser.first_name,
-				last_name: updatedUser.last_name,
-				email: updatedUser.email,
-				location: updatedUser.location
-			}, {
-				withCredentials: true,
-			})
+			.put(
+				"http://localhost:8000/api/users/update",
+				{
+					id: user.id,
+					first_name: updatedUser.first_name,
+					last_name: updatedUser.last_name,
+					email: updatedUser.email,
+					location: updatedUser.location,
+				},
+				{
+					withCredentials: true,
+				}
+			)
 			.then((res) => {
-				setLoaded(false)
-				setUpdatedUser(res.data)
+				setLoaded(false);
+				setUpdatedUser(res.data);
 				setUser(res.data);
-				setLoaded(true)
+				setLoaded(true);
 			});
 	};
 
@@ -48,8 +52,6 @@ function UserSettings() {
 			.split("/")
 			.slice(3)
 			.join("");
-
-		console.log(imageName);
 
 		// delete the image from amazon S3 bucket
 		axios
@@ -134,7 +136,7 @@ function UserSettings() {
 			.put("http://localhost:8000/api/users/updateProfilePic", {
 				userId: updatedUser.id,
 				profilePicture: imageUrl,
-			})
+			}, {withCredentials: true})
 			.then((res) => {
 				console.log(res);
 				setTimeout(function () {
@@ -155,7 +157,7 @@ function UserSettings() {
 
 	// user account delete function
 	const handleUserAccountDelete = () => {
-		if (user.profile.profilePicture != "/images/person-placeholder.jpg") {
+		if (user.profile.profilePicture !== "/images/person-placeholder.jpg") {
 			handleProfilePicDelete();
 		}
 
@@ -206,6 +208,7 @@ function UserSettings() {
 							<img
 								src={user.profile.profilePicture}
 								className="avatar rounded-full"
+								alt="profile"
 							/>
 							<button
 								className="ml-10 rounded bg-blue-600 px-6 py-2 text-white"

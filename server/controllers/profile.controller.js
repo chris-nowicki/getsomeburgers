@@ -18,7 +18,7 @@ module.exports = {
 			});
 			res.json(updateUserProfile);
 		} catch (err) {
-			console.log(err);
+			res.json(err)
 		}
 	},
 
@@ -35,7 +35,7 @@ module.exports = {
 			});
 			res.json(updateUserProfile);
 		} catch (err) {
-			console.log(err);
+			res.json(err)
 		}
 	},
 

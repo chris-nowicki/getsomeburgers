@@ -63,7 +63,6 @@ module.exports = {
 				// if there is an error then return the error
 			} catch (err) {
 				res.json(err);
-				console.log(err);
 			}
 		} else {
 			// error that is returned if email exists
@@ -147,10 +146,7 @@ module.exports = {
 
 	// user update
 	update: async (req, res) => {
-		const { id, first_name, last_name, email, location } =
-			req.body;
-		console.log(req.body);
-
+		const { id, first_name, last_name, email, location } = req.body;
 		try {
 			const updateUser = await prisma.user.update({
 				where: {
@@ -180,7 +176,7 @@ module.exports = {
 	delete: async (req, res) => {
 		let { id } = req.params;
 		id = Number(id);
-		console.log(id);
+
 		try {
 			const deleteUser = await prisma.user.delete({
 				where: {

@@ -67,7 +67,6 @@ module.exports = {
 			});
 
 			// if the burger doesn't exist then create it and link it to the restaurant]
-			console.log('we get here')
 			restaurantId = getRestaurant.id;
 			if (getBurger === null) {
 				let result = await prisma.restaurant.update({

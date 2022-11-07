@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MyContext from "../contexts/MyContext";
+import axios from "axios";
 
 function ContextWrapper({ children }) {
 	const [user, setUser] = useState([]);
@@ -9,7 +10,7 @@ function ContextWrapper({ children }) {
 	const [posts, setPosts] = useState([]);
 	const [open, setOpen] = useState(false);
 	const [errors, setErrors] = useState();
-	const [restaurantNames, setRestaurantNames] = useState([])
+	const [restaurantList, setRestaurantList] = useState([]);
 
 	return (
 		<MyContext.Provider
@@ -28,8 +29,8 @@ function ContextWrapper({ children }) {
 				setOpen,
 				errors,
 				setErrors,
-				restaurantNames,
-				setRestaurantNames
+				restaurantList,
+				setRestaurantList,
 			}}
 		>
 			{children}

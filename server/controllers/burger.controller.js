@@ -51,31 +51,18 @@ module.exports = {
 			res.json(err);
 		}
 	},
-	// findOne
-	createBurger: async (req, res) => {
-		const { restaurantName, burgerName, burgerPicture, id } = req.body;
-		console.log(req.body);
+
+	getBurgers: async (req, res) => {
+		let { id } = req.params;
 		try {
-			const createBurger = await prisma.restaurant.update({
+			const getBurgers = await prisma.burger.findMany({
 				where: {
-					id: id,
-				},
-				data: {
-					burgers: {
-						create: {
-							burgerName: burgerName,
-							pictures: {
-								create: {
-									burgerPicture: burgerPicture,
-								},
-							},
-						},
-					},
+					relatedRestaurantId: Number(id),
 				},
 			});
-			res.json(createdBurger);
+			res.json(getBurgers);
 		} catch (err) {
-			res.json(err);
+			res.json(err)
 		}
 	},
 };
