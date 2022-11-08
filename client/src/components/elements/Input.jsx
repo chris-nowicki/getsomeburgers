@@ -9,6 +9,7 @@ function Input({
 	onChangeProp,
 	errorProps,
 	isDisabled = false,
+	placeholder
 }) {
 	return (
 		<div className="mb-3">
@@ -24,7 +25,7 @@ function Input({
 							? "block w-full border-gray-300 py-2 pl-2 text-2xl shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-xl"
 							: "block w-full  border-red-300 pr-10 text-2xl  text-red-900 placeholder-red-300 focus:border-red-500 focus:outline-none focus:ring-red-500 sm:text-xl"
 					}
-					placeholder=""
+					placeholder={placeholder}
 					autoComplete=""
 					value={value}
 					aria-invalid="true"

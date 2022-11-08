@@ -18,6 +18,7 @@ const createPostSchema = require("../validations/createPostValidation");
 const updatePostSchema = require("../validations/updatePostValidation");
 const burgerSchema = require("../validations/burgerValidation");
 const restaurantSchema = require("../validations/restaurantUpdateValidation");
+const userSettingsSchema = require("../validations/userSettingsValidation")
 
 // routes
 module.exports = (app) => {
@@ -69,6 +70,9 @@ module.exports = (app) => {
 	// get logged in user
 	app.get("/api/users/getUser", authenticate, UserController.getLoggedInUser);
 
+	// get location
+	app.get('/api/users/zip/:id', authenticate, UserController.getLocation)
+
 
 	// update users profile picture when the uploaded image is deleted
 	// resets users profile picture to default
@@ -85,7 +89,7 @@ module.exports = (app) => {
 	);
 
 	// update user information from the settings menu
-	app.put("/api/users/update", authenticate, UserController.update);
+	app.put("/api/users/update", authenticate, validation(userSettingsSchema),  UserController.update);
 
 	// update post from the edit post section
 	app.put(

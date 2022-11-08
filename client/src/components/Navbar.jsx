@@ -17,8 +17,7 @@ function Navbar() {
 			)
 			.then((res) => {
 				setUser([]);
-				setLoaded(false)
-
+				setLoaded(false);
 				navigate("/");
 			})
 			.catch((err) => console.log(err));
@@ -31,7 +30,7 @@ function Navbar() {
 				<div className="container mx-auto flex w-3/4 max-w-6xl flex-row items-center justify-between">
 					<div className="flex  items-center text-3xl">
 						<a
-							href="/dashboard"
+							href="/dashboard/feed"
 							className="flex flex-row items-center text-4xl"
 						>
 							GitSum <img src={burgerIcon} alt="burgerIcon" />
@@ -45,7 +44,11 @@ function Navbar() {
 					<div className="dropdown mr-2 flex flex-col items-center">
 						{/* profile icon */}
 						<button className="z-20">
-							<img src={user.profile.profilePicture} className='avatar rounded-full' />
+							<img
+								src={user.profile.profilePicture}
+								className="avatar rounded-full"
+								alt="profile"
+							/>
 						</button>
 
 						{/* dropdown hidden user menu */}

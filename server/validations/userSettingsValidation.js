@@ -3,7 +3,7 @@ const yup = require("yup");
 const regEmail =
 	/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const userSchema = yup.object({
+const userSettingsSchema = yup.object({
 	first_name: yup
 		.string()
 		.trim()
@@ -22,6 +22,7 @@ const userSchema = yup.object({
 		.required({
 			last_name: "Last Name is required",
 		}),
+	location: yup.string().trim().optional(),
 	email: yup
 		.string()
 		.trim()
@@ -30,14 +31,6 @@ const userSchema = yup.object({
 			message: { email: "Invalid email address" },
 			excludeEmptyString: true,
 		}),
-	password: yup.string().trim().required({ password: "password required" }),
-	confirm_password: yup
-		.string()
-		.trim()
-		.required({ confirm_password: "Please confirm your password" })
-		.oneOf([yup.ref("password")], {
-			confirm_password: "Passwords must match",
-		})
 });
 
-module.exports = userSchema;
+module.exports = userSettingsSchema;

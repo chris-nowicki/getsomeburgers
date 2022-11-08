@@ -42,8 +42,35 @@ function UserSettings() {
 				setLoaded(false);
 				setUpdatedUser(res.data);
 				setUser(res.data);
+				setErrors([]);
 				setLoaded(true);
+			})
+			.catch((err) => {
+				let parsedErrors = Object.assign(
+					{},
+					...err.response.data.error.errors
+				);
+				setErrors(parsedErrors);
 			});
+	};
+
+	const handleLocation = (e) => {
+		if (e.target.value.length === 5) {
+			axios
+				.get(`http://localhost:8000/api/users/zip/${e.target.value}`, {
+					withCredentials: true,
+				})
+				.then((res) => {
+					let city = res.data.city_states[0].city;
+					let state = res.data.city_states[0].state_abbreviation;
+					let location = { ...updatedUser };
+					location.location = `${city}, ${state}`;
+					setUpdatedUser(location);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		} 
 	};
 
 	const handleProfilePicDelete = () => {
@@ -133,10 +160,14 @@ function UserSettings() {
 		const imageUrl = url.split("?")[0];
 
 		axios
-			.put("http://localhost:8000/api/users/updateProfilePic", {
-				userId: updatedUser.id,
-				profilePicture: imageUrl,
-			}, {withCredentials: true})
+			.put(
+				"http://localhost:8000/api/users/updateProfilePic",
+				{
+					userId: updatedUser.id,
+					profilePicture: imageUrl,
+				},
+				{ withCredentials: true }
+			)
 			.then((res) => {
 				console.log(res);
 				setTimeout(function () {
@@ -144,6 +175,7 @@ function UserSettings() {
 					picUpdate.profile.profilePicture = res.data.profilePicture;
 					setUpdatedUser(picUpdate);
 					setUser(picUpdate);
+					document.getElementById("file_input").value = "";
 				}, 1300);
 			})
 			.catch((err) => {
@@ -230,7 +262,7 @@ function UserSettings() {
 							className="mt-1 mb-3 text-sm text-gray-500 dark:text-gray-300"
 							id="file_input_help"
 						>
-							PNG, JPG (MAX. 800x400px).
+							PNG, JPG (MAX. 600x400px).
 						</p>
 						<div className="flex flex-row">
 							<button
@@ -266,20 +298,43 @@ function UserSettings() {
 							onChangeProp={(e) => handleChange(e)}
 							errorProps={errors ? errors.email : false}
 						/>
-						<Input
-							label="Location"
-							type="text"
-							name="location"
-							value={updatedUser.location}
-							onChangeProp={(e) => handleChange(e)}
-							errorProps={errors ? errors.location : false}
-						/>
+						<div className="flex w-full flex-col">
+							<h1 className="text-xl">Location</h1>
+							<p className="text-lg text-blue-600">
+								Enter your zip code or type in your city, state.
+							</p>
+
+							<div className="flex flex-row items-center">
+								<Input
+									label=""
+									type="number"
+									name="zipCode"
+									placeholder="Zip Code"
+									onChangeProp={(e) => handleLocation(e)}
+									errorProps={errors ? errors.zipCode : false}
+								/>
+								<div className="ml-6 flex w-full flex-col">
+									<label className="text-2xl"></label>
+									<Input
+										label=""
+										type="text"
+										name="location"
+										placeholder="City, State"
+										value={updatedUser.location}
+										onChangeProp={(e) => handleChange(e)}
+										errorProps={
+											errors ? errors.location : false
+										}
+									/>
+								</div>
+							</div>
+						</div>
 						<button className="w-full bg-orange-400 p-4 text-xl text-white shadow shadow-black/25 hover:bg-orange-300 hover:shadow-none">
 							Save
 						</button>
-						<div className="mt-10 border-t-2 border-dotted border-red-600">
+						<div className="mt-10 flex flex-col items-center justify-center border-t-2 border-dotted border-red-600">
 							<button
-								className="w-full p-4 text-red-600 hover:underline"
+								className="w-1/3 p-4 text-red-600 hover:underline"
 								onClick={() => handleUserAccountDelete()}
 							>
 								delete account

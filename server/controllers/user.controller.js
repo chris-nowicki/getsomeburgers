@@ -2,6 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const secret = process.env.SECRET_KEY;
+const smarty_id = process.env.SMARTY_AUTH_ID;
+const smarty_token = process.env.SMARTY_AUTH_TOKEN;
+const axios = require("axios");
 
 const prisma = new PrismaClient({
 	errorFormat: "pretty",
@@ -187,5 +190,25 @@ module.exports = {
 		} catch (err) {
 			res.json(err);
 		}
+	},
+
+	// get location based on zipcode
+	getLocation: async (req, res) => {
+		let { id } = req.params;
+		let zipCode = Number(id);
+		let result;
+
+		await axios
+			.get(
+				`https://us-zipcode.api.smartystreets.com/lookup?auth-id=${smarty_id}&auth-token=${smarty_token}&zipcode=${zipCode}`
+			)
+			.then((res) => {
+				console.log(res.data[0]);
+				result = res.data[0];
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		res.json(result);
 	},
 };

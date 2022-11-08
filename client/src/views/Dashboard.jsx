@@ -20,12 +20,15 @@ function Dashboard() {
 
 	// retrieve logged in user and return to login page if there is no logged in user
 	useEffect(() => {
+		// redirect /dashboard to /feed
+		if (window.location.href === "http://localhost:3000/dashboard/") {
+			navigate("feed");
+		}
 		axios
 			.get("http://localhost:8000/api/users/getUser", {
 				withCredentials: true,
 			})
 			.then((res) => {
-				console.log(res.data);
 				setUser(res.data);
 				setLoaded(true);
 			})
@@ -44,7 +47,7 @@ function Dashboard() {
 				withCredentials: true,
 			})
 			.then((res) => {
-				setRestaurantList(res.data)
+				setRestaurantList(res.data);
 			})
 			.catch((err) => {
 				console.log(err);
@@ -54,7 +57,9 @@ function Dashboard() {
 
 	const getPostStats = () => {
 		axios
-			.get(`http://localhost:8000/api/posts/user-total/${user.id}`, {withCredentials: true})
+			.get(`http://localhost:8000/api/posts/user-total/${user.id}`, {
+				withCredentials: true,
+			})
 			.then((res) => {
 				setTotalRatings(res.data.totalCount);
 			})
@@ -94,12 +99,13 @@ function Dashboard() {
 								<p className="text-center text-xl">
 									{user.first_name} {user.last_name}
 								</p>
-								{user.profile.location !== null && (
-									<p className="flex flex-row items-center justify-center text-sm text-orange-400">
-										<ion-icon name="location-outline"></ion-icon>
-										<span>{user.profile.location}</span>
-									</p>
-								)}
+								{user.profile.location !== null ||
+									(user.profile.location !== "" && (
+										<p className="flex flex-row items-center justify-center text-sm text-orange-400">
+											<ion-icon name="location-outline"></ion-icon>
+											<span>{user.profile.location}</span>
+										</p>
+									))}
 
 								{/* total and unique burger rating count */}
 								<div className="mt-10 flex w-full flex-col items-center rounded border bg-white shadow shadow-black/25">

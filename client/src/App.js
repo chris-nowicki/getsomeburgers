@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import ContextWrapper from "./components/ContextWrapper";
 import LandingPage from "./components/LandingPage";
 import Register from "./components/Register";
