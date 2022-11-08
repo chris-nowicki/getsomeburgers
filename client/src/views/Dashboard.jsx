@@ -21,7 +21,10 @@ function Dashboard() {
 	// retrieve logged in user and return to login page if there is no logged in user
 	useEffect(() => {
 		// redirect /dashboard to /feed
-		if (window.location.href === "http://localhost:3000/dashboard/") {
+		if (
+			window.location.href === "http://localhost:3000/dashboard" ||
+			window.location.href === "http://localhost:3000/dashboard/"
+		) {
 			navigate("feed");
 		}
 		axios
