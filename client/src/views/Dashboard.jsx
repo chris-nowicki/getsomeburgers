@@ -102,13 +102,13 @@ function Dashboard() {
 								<p className="text-center text-xl">
 									{user.first_name} {user.last_name}
 								</p>
-								{user.profile.location !== null ||
-									(user.profile.location !== "" && (
+								{user.profile.location !== null &&
+									user.profile.location.length !== 0 && (
 										<p className="flex flex-row items-center justify-center text-sm text-orange-400">
 											<ion-icon name="location-outline"></ion-icon>
 											<span>{user.profile.location}</span>
 										</p>
-									))}
+									)}
 
 								{/* total and unique burger rating count */}
 								<div className="mt-10 flex w-full flex-col items-center rounded border bg-white shadow shadow-black/25">

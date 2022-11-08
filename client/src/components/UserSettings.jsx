@@ -24,6 +24,10 @@ function UserSettings() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 
+		if (updatedUser.location === null) {
+			updatedUser.location = "";
+		}
+
 		axios
 			.put(
 				"http://localhost:8000/api/users/update",
@@ -70,44 +74,46 @@ function UserSettings() {
 				.catch((err) => {
 					console.log(err);
 				});
-		} 
+		}
 	};
 
 	const handleProfilePicDelete = () => {
-		// remove https:// from the image name
-		const imageName = user.profile.profilePicture
-			.split("/")
-			.slice(3)
-			.join("");
+		if (user.profile.picture !== "/images/person-placeholder.jpg") {
+			// remove https:// from the image name
+			const imageName = user.profile.profilePicture
+				.split("/")
+				.slice(3)
+				.join("");
 
-		// delete the image from amazon S3 bucket
-		axios
-			.delete(`http://localhost:8000/s3image/delete/${imageName}`, {
-				withCredentials: true,
-			})
-			.then((res) => {
-				console.log(res.data);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+			// delete the image from amazon S3 bucket
+			axios
+				.delete(`http://localhost:8000/s3image/delete/${imageName}`, {
+					withCredentials: true,
+				})
+				.then((res) => {
+					console.log(res.data);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
 
-		// update the image to point to default image
-		axios
-			.put(
-				"http://localhost:8000/api/users/deleteProfilePic",
-				{ id: user.id },
-				{ withCredentials: true }
-			)
-			.then((res) => {
-				let picUpdate = { ...updatedUser };
-				picUpdate.profile.profilePicture = res.data.profilePicture;
-				setUpdatedUser(picUpdate);
-				setUser(picUpdate);
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+			// update the image to point to default image
+			axios
+				.put(
+					"http://localhost:8000/api/users/deleteProfilePic",
+					{ id: user.id },
+					{ withCredentials: true }
+				)
+				.then((res) => {
+					let picUpdate = { ...updatedUser };
+					picUpdate.profile.profilePicture = res.data.profilePicture;
+					setUpdatedUser(picUpdate);
+					setUser(picUpdate);
+				})
+				.catch((err) => {
+					console.log(err);
+				});
+		}
 	};
 
 	// update the profile picture

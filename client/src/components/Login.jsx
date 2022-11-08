@@ -13,22 +13,25 @@ function Login() {
 	// submit registration form function
 	const handleSubmit = (e) => {
 		e.preventDefault();
-
-		axios
-			.post("http://localhost:8000/api/users/login", user, {
-				withCredentials: true,
-			})
-			.then((user) => {
-				console.log(user.data);
-				setErrors([]);
-				navigate("/dashboard/feed");
-			})
-			.catch((err) => {
-				console.log(err.response.data);
-				if (err.response.data === "Unauthorized") {
-					setErrors({ message: "Invalid Email/Password" });
-				}
-			});
+		if (user.length === 0 || user.password.length === 0) {
+			setErrors({ message: "Invalid Email/Password" });
+		} else {
+			axios
+				.post("http://localhost:8000/api/users/login", user, {
+					withCredentials: true,
+				})
+				.then((user) => {
+					console.log(user.data);
+					setErrors([]);
+					navigate("/dashboard/feed");
+				})
+				.catch((err) => {
+					console.log(err.response.data);
+					if (err.response.data === "Unauthorized") {
+						setErrors({ message: "Invalid Email/Password" });
+					}
+				});
+		}
 	};
 
 	const handleChange = (e) => {
@@ -48,18 +51,14 @@ function Login() {
 				</p>
 				<p className="ml-4 text-center text-xl">
 					or{" "}
-					<a
-						href="/register"
-						className=" hover:text-orange-600"
-					>
+					<a href="/register" className=" hover:text-orange-600">
 						register
 					</a>
 				</p>
 				{!errors ? (
-					<p className="hidden text-red-600">
-					</p>
+					<p className="hidden text-red-600"></p>
 				) : (
-					<p className="my-6 text-2xl text-red-600 text-center">
+					<p className="my-6 text-center text-2xl text-red-600">
 						{errors.message}
 					</p>
 				)}
