@@ -52,9 +52,13 @@ function Post({
 					className="flex flex-row
 								justify-start"
 				>
-					<img src={profilePic} className='avatar rounded-full ml-10'/>
-					<div className="ml-4 flex flex-col w-full">
-						<div className="mb-1 flex flex-row items-center justify-between mr-10">
+					<img
+						src={profilePic}
+						className="avatar ml-10 max-h-[48px] rounded-full"
+						alt="profile"
+					/>
+					<div className="ml-4 flex w-full flex-col">
+						<div className="mb-1 mr-10 flex flex-row items-center justify-between">
 							<p className=" text-orange-400">
 								{month} {day}, {year}
 							</p>
@@ -70,21 +74,30 @@ function Post({
 											delete
 										</button>
 										|
-										<a href={`edit-post/${postId}`} className="ml-2 hover:text-orange-400">
+										<a
+											href={`edit-post/${postId}`}
+											className="ml-2 hover:text-orange-400"
+										>
 											edit
 										</a>
 									</p>
 								</>
 							)}
 						</div>
-						<p className="mb-4 text-xl leading-tight mr-10">
-							{fname} is chowing down a {burgerName} from{" "}
-							{restaurantName}
+						<p className="mb-4 mr-10 text-xl leading-tight">
+							{fname} is chowing down a{" "}
+							<span className="text-orange-400">
+								{burgerName}
+							</span>{" "}
+							from{" "}
+							<span className="text-orange-400">
+								{restaurantName}
+							</span>
 						</p>
 					</div>
 				</div>
 				<div className="flex flex-row justify-center">
-					<img src={picture} className="burger" />
+					<img src={picture} className="burger" alt="burger" />
 				</div>
 
 				<div className="mt-2 flex  flex-row justify-center text-2xl text-orange-400">
