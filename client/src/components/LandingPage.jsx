@@ -1,6 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import burger from "../images/cheeseburger-landing.jpg";
 import MyContext from "../contexts/MyContext";
+import burgerIcon from "../images/hamburger-icon.png";
 
 function LandingPage() {
 	const { setErrors } = useContext(MyContext);
@@ -22,27 +23,9 @@ function LandingPage() {
 				{/* navigation */}
 				<nav className="flex w-full flex-row justify-between border-b-2 border-black pb-2">
 					<div className="flex items-center pt-10 text-3xl">
-						<a
-							href="https://www.instagram.com"
-							className="mr-2"
-							rel="noopener"
-						>
-							<ion-icon name="logo-instagram"></ion-icon>
-						</a>
-						<a
-							href="https://www.youtube.com"
-							className="mr-2"
-							rel="noopener"
-						>
-							<ion-icon name="logo-youtube"></ion-icon>
-						</a>
-						<a
-							href="https://www.twitter.com"
-							className="mr-2"
-							rel="noopener"
-						>
-							<ion-icon name="logo-twitter"></ion-icon>
-						</a>
+						<p className="flex flex-row items-center text-4xl">
+							GitSum <img src={burgerIcon} alt="burgerIcon" />
+						</p>
 					</div>
 					<div className="pt-10 pb-2">
 						<a
@@ -57,7 +40,19 @@ function LandingPage() {
 				{/* hero section */}
 				<section className="mt-12 flex w-full flex-row">
 					<div className="mr-10 flex w-1/2 flex-col items-center justify-center px-4 text-center">
-						<h1 className="text-5xl">Get Some Burgers!</h1>
+						<h1 className="text-5xl">GitSum Burgers!</h1>
+						<div className="mt-4 flex flex-col text-left">
+							<p className="-mb-2 text-base text-gray-400">
+								Sounds like
+							</p>
+							<p className="text-3xl">
+								<b>get</b>
+								<span className="mx-1 text-sm">
+									<ion-icon name="ellipse"></ion-icon>
+								</span>
+								some
+							</p>
+						</div>
 						<p className="mt-4 text-3xl">
 							Binge, Chow Down, Divulge and share your favorite
 							burgers!
@@ -121,6 +116,7 @@ function LandingPage() {
 				{/* landing page footer */}
 				<section className="mt-10 flex w-full flex-col items-center justify-center border-t border-black">
 					{/* triangle click to go to top */}
+					{/* eslint-disable-next-line */}
 					<a
 						href="#"
 						className="-mb-8 -translate-y-4 text-2xl text-orange-400"
@@ -134,36 +130,39 @@ function LandingPage() {
 						/>
 					</a>
 					{/* footer links */}
-					<div className="flex w-full flex-row">
-						<div className="flex w-1/2 flex-row justify-center">
-							<div className="mr-8 flex flex-col">
-								<a href="#" className="text-2xl">
-									Contact
-								</a>
-							</div>
-							<div className="flex flex-col">
+					<div className="flex w-full flex-row items-center pb-20">
+						<div className="ml-3 flex w-1/2 flex-row items-center">
+							{/* eslint-disable-next-line */}
+							<a href="#" className="mr-4 text-xl">
+								Contact
+							</a>
+
+							<div className="mt-2 flex flex-row items-center">
 								<a
 									href="https://www.instagram.com"
-									className="mb-1 text-2xl"
+									className="mr-2 text-xl"
+									rel="noopener"
 								>
-									Instagram
+									<ion-icon name="logo-instagram"></ion-icon>
 								</a>
 								<a
 									href="https://www.youtube.com"
-									className="mb-1 text-2xl"
+									className="mr-2 text-xl"
+									rel="noopener"
 								>
-									Youtube
+									<ion-icon name="logo-youtube"></ion-icon>
 								</a>
 								<a
 									href="https://www.twitter.com"
-									className="mb-1 text-2xl"
+									className="mr-2 text-xl"
+									rel="noopener"
 								>
-									Twitter
+									<ion-icon name="logo-twitter"></ion-icon>
 								</a>
 							</div>
 						</div>
 						<div className="flex w-1/2 flex-row justify-center">
-							<p className="text-2xl">
+							<p className="text-xl">
 								&#169; Get Some Burgers, Inc. 2022
 							</p>
 						</div>
