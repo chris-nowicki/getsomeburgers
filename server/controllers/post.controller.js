@@ -206,7 +206,11 @@ module.exports = {
 				createdAt: "desc",
 			},
 			include: {
-				author: true,
+				author: {
+					include: {
+						profile: true
+					}
+				},
 				restaurant: true,
 				burger: true,
 				burgerPic: true,

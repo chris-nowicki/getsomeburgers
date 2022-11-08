@@ -11,6 +11,7 @@ function Post({
 	author,
 	postId,
 	picture,
+	profilePic,
 }) {
 	const { user, posts, setPosts } = useContext(MyContext);
 
@@ -51,17 +52,7 @@ function Post({
 					className="flex flex-row
 								justify-start"
 				>
-
-					{/* <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-						<svg
-							className="h-full w-full text-gray-300"
-							fill="currentColor"
-							viewBox="0 0 24 24"
-						>
-							<path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-						</svg>
-					</span> */}
-					<img src="/images/profile-pic.jpg" className='avatar rounded-full ml-10'/>
+					<img src={profilePic} className='avatar rounded-full ml-10'/>
 					<div className="ml-4 flex flex-col w-full">
 						<div className="mb-1 flex flex-row items-center justify-between mr-10">
 							<p className=" text-orange-400">
